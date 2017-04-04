@@ -31,8 +31,8 @@ public class User {
 	private String lastName;
 	@Column(unique = true, nullable=false)
 	private String email;
-	@ManyToOne
-	@JoinColumn(name="ADDRESS_ID", referencedColumnName="USER_ID")
+	@ManyToOne(targetEntity = Address.class)
+	@JoinColumn(name="ADDRESS_ID")
 	private Address address;
 	
 	

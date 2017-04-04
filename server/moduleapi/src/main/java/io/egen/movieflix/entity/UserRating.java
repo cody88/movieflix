@@ -21,8 +21,8 @@ public class UserRating {
 	@Column(name="USER_RATING_ID")
 	private String userRatingId;
 	
-	@OneToOne
-	@JoinColumn(name="USER_ID", referencedColumnName="USER_RATING_ID", nullable=false)
+	@OneToOne(targetEntity = User.class)
+	@JoinColumn(name="USER_ID", nullable=false)
 	private String userId;
 	@JoinColumn(name="TITLE_ID", referencedColumnName="USER_RATING_ID", nullable=false)
 	private String titleId;

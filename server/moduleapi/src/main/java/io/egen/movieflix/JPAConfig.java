@@ -31,8 +31,8 @@ public class JPAConfig {
 	@Bean
 	public DataSource getDatasource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
-		ds.setDriverClassName("com.mysql.jdbc.driver");
-		ds.setUrl("jdbc:mysql://localhost:3306/movieflix");
+		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		ds.setUrl("jdbc:mysql://localhost:3306/movieflix?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Chicago");
 		ds.setUsername("root");
 		ds.setPassword("kdiq2ifhf278");
 		return ds;
@@ -46,8 +46,8 @@ public class JPAConfig {
 
 	private Properties jpaProperties() {
 		Properties props = new Properties();
-		props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-		props.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+		props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+		props.setProperty("hibernate.hbm2ddl.auto", "create");
 		props.setProperty("hibernate.show_sql", "true");
 		props.setProperty("hibernate.format_sql", "true");
 		return props;

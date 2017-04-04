@@ -1,5 +1,6 @@
 package io.egen.movieflix.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ public class Award {
 	@Id
 	@GenericGenerator(name="movieflixUUID", strategy="uuid2")
 	@GeneratedValue(generator="movieflixUUID")
+	@Column(name = "AWARD_ID")
 	private String awardId;
 	
 	private String awardName;

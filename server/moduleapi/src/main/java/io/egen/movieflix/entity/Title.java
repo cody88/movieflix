@@ -1,13 +1,19 @@
 package io.egen.movieflix.entity;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -15,6 +21,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table
+@NamedQueries({
+	@NamedQuery(name="Title.findAll", query="FROM Title t"),
+	@NamedQuery(name="Title.findByEmail", query="SELECT u FROM User u where u.email=:pEmail")
+})
 public class Title {
 
 	@Id
@@ -23,17 +33,30 @@ public class Title {
 	@Column(name="TITLE_ID")
 	private String titleId;
 	
+	private String titleName;
 	private int year;
 	private String rated;
 	private Date releaseDate;
 	private int runtimeInMinutes;
+	@ElementCollection
+    @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
 	private List<Genre> genre;
+	@ElementCollection
+    @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
 	private List<String> directors;
+	@ElementCollection
+    @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
 	private List<String> writers;
+	@ElementCollection
+    @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
 	private List<String> actors;
 	private String plot;
+	@ElementCollection
+    @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
 	private List<Language> languages;
 	private String country;
+	@ManyToOne(targetEntity = Award.class)
+	@JoinColumn(name="AWARD_ID")
 	private Award primaryAward;
 	private int primaryAwardCount;
 	private int otherWins;
@@ -43,11 +66,13 @@ public class Title {
 	@Column(nullable=false)
 	private String type;
 	
-	@OneToOne
-	@JoinColumn(name="IMDB_INFO_ID", referencedColumnName="TITLE_ID")
+	@OneToOne(targetEntity = IMDBInfo.class)
+	@JoinColumn(name="IMDB_INFO_ID")
 	private IMDBInfo imdbInfo;
 	
-	@JoinColumn(name="USER_RATING_ID", referencedColumnName="TITLE_ID")
+	@ElementCollection
+    @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
+	//@JoinColumn(name="USER_RATING_ID", referencedColumnName="TITLE_ID")
 	private List<UserRating> userRating;
 
 	
@@ -57,6 +82,14 @@ public class Title {
 
 	public void setTitleId(String titleId) {
 		this.titleId = titleId;
+	}
+
+	public String getTitleName() {
+		return titleName;
+	}
+
+	public void setTitleName(String titleName) {
+		this.titleName = titleName;
 	}
 
 	public int getYear() {
@@ -96,7 +129,7 @@ public class Title {
 	}
 
 	public void setGenre(List<Genre> genre) {
-		this.genre.clear();
+		this.genre = new ArrayList<Genre>();
 		this.genre.addAll(genre);
 	}
 
@@ -105,7 +138,7 @@ public class Title {
 	}
 
 	public void setDirectors(List<String> directors) {
-		this.directors.clear();
+		this.directors = new ArrayList<String>();
 		this.directors.addAll(directors);
 	}
 
@@ -114,7 +147,7 @@ public class Title {
 	}
 
 	public void setWriters(List<String> writers) {
-		this.writers.clear();
+		this.writers = new ArrayList<String>();
 		this.writers.addAll(writers);
 	}
 
@@ -123,7 +156,7 @@ public class Title {
 	}
 
 	public void setActors(List<String> actors) {
-		this.actors.clear();
+		this.actors = new ArrayList<String>();
 		this.actors.addAll(actors);
 	}
 
@@ -140,7 +173,7 @@ public class Title {
 	}
 
 	public void setLanguages(List<Language> languages) {
-		this.languages.clear();
+		this.languages = new ArrayList<Language>();
 		this.languages.addAll(languages);
 	}
 
@@ -221,7 +254,7 @@ public class Title {
 	}
 
 	public void setUserRating(List<UserRating> userRating) {
-		this.userRating.clear();
+		this.userRating = new ArrayList<UserRating>();
 		this.userRating.addAll(userRating);
 	}
 	
