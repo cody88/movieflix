@@ -9,10 +9,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Proxy;
 
 
 @Entity
 @Table
+@Proxy(lazy=false)
 public class UserRating {
 
 	@Id
@@ -23,7 +25,7 @@ public class UserRating {
 	
 	@OneToOne(targetEntity = User.class)
 	@JoinColumn(name="USER_ID", nullable=false)
-	private String userId;
+	private User user;
 	@JoinColumn(name="TITLE_ID", referencedColumnName="USER_RATING_ID", nullable=false)
 	private String titleId;
 	private int starRating;
@@ -39,12 +41,12 @@ public class UserRating {
 		this.userRatingId = userRatingId;
 	}
 
-	public String getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getTitleId() {

@@ -29,22 +29,22 @@ public class UserController {
 		return service.findAll();
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET, path = "{id}")
 	public User findOne(@PathVariable("id") String id) {
 		return service.findOne(id);
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST, path = "{user}")
 	public User create(@RequestBody User user) {
 		return service.create(user);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT, path = "/{id}/{user}")
 	public User update(@PathVariable("id") String id, @RequestBody User user) {
 		return service.update(id, user);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE)
+	@RequestMapping(method = RequestMethod.DELETE, path = "{id}")
 	public void delete(@PathVariable("id") String id) {
 		service.delete(id);
 	}

@@ -1,5 +1,7 @@
 package io.egen.movieflix.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,9 @@ import org.hibernate.annotations.GenericGenerator;
 	@NamedQuery(name="User.findAll", query="SELECT u FROM User u ORDER BY u.firstName"),
 	@NamedQuery(name="User.findByEmail", query="SELECT u FROM User u where u.email=:pEmail")
 })
-public class User {
+public class User implements Serializable {
+
+	private static final long serialVersionUID = -4546378706290995683L;
 
 	@Id
 	@GenericGenerator(name="movieflixUUID", strategy="uuid2")

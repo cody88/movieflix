@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,7 @@ import io.egen.movieflix.repository.UserRepository;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-	@PersistenceContext
+	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	private EntityManager em;
 
 	@Override
