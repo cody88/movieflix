@@ -23,13 +23,18 @@ import org.hibernate.annotations.GenericGenerator;
 @Table
 @NamedQueries({
 	@NamedQuery(name="Title.findAll", query="FROM Title t"),
+	@NamedQuery(name="Title.findOne", query="FROM Title t WHERE t.titleId=:tId"),
 	@NamedQuery(name="Title.findTopImdb", query="FROM Title t WHERE t.type=:tp ORDER BY t.imdbInfo.imdbRating DESC"),
 	@NamedQuery(name="Title.filterType", query="FROM Title t WHERE t.type=:tp"),
 	@NamedQuery(name="Title.filterYear", query="FROM Title t WHERE t.year=:tp"),
-	@NamedQuery(name="Title.filterGenre", query="FROM Title t WHERE t.genre.genreName in :tp"),
-	@NamedQuery(name="Title.sortImdbRating", query="FROM Title t ORDER BY t.imdbInfo.imdbRating :order"),
-	@NamedQuery(name="Title.sortYear", query="FROM Title t ORDER BY t.year :order"),
-	@NamedQuery(name="Title.sortImdbVotes", query="FROM Title t ORDER BY t.imdbInfo.imdbVotes :order")
+	/*@NamedQuery(name="Title.filterGenre", query="SELECT t FROM Title t, Genre g WHERE"
+											+ "t.genre.genreId=g.genreId AND g.genreName=:tp"),*/
+	@NamedQuery(name="Title.sortImdbRatingasc", query="FROM Title t ORDER BY t.imdbInfo.imdbRating"),
+	@NamedQuery(name="Title.sortImdbRatingdesc", query="FROM Title t ORDER BY t.imdbInfo.imdbRating DESC"),
+	@NamedQuery(name="Title.sortYearasc", query="FROM Title t ORDER BY t.year"),
+	@NamedQuery(name="Title.sortYeardesc", query="FROM Title t ORDER BY t.year DESC"),
+	@NamedQuery(name="Title.sortImdbVotesasc", query="FROM Title t ORDER BY t.imdbInfo.imdbVotes"),
+	@NamedQuery(name="Title.sortImdbVotesdesc", query="FROM Title t ORDER BY t.imdbInfo.imdbVotes DESC")
 })
 public class Title {
 

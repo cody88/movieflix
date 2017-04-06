@@ -15,12 +15,14 @@ public interface TitleService {
 	
 	public List<Title> getSortedTitles(String authToken, String sortOrder, String field, int fromCount);
 	
-	public Title getDetails(String authToken, String name);
+	public Title getDetails(String authToken, String titleId);
 	
-	public void rateTitle(String authToken, String titleId, String userId, int starRating);
+	public int rateTitle(String authToken, String titleId, int starRating);
 	
-	public void reviewTitle(String authToken, String titleId, String userId, int userReview);
+	public int reviewTitle(String authToken, String titleId, String userReview);
 	
+	public int addNewTitle(String authToken, Title title);
 	
+	public int deleteTitle(String authToken, String titleId);
 
 }

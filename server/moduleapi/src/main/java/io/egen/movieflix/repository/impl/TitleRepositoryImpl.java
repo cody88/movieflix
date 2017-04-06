@@ -5,12 +5,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
 import io.egen.movieflix.entity.Title;
+import io.egen.movieflix.entity.UserRating;
 import io.egen.movieflix.repository.TitleRepository;
 
 
@@ -21,7 +23,6 @@ public class TitleRepositoryImpl implements TitleRepository {
 	private EntityManager em;
 	
 	@Override
-	@Transactional
 	public List<Title> getCatalog(int fromCount) {
 		TypedQuery<Title> query = em.createNamedQuery("Title.findAll", Title.class);
 		query.setFirstResult(fromCount);
@@ -40,7 +41,7 @@ public class TitleRepositoryImpl implements TitleRepository {
 
 	@Override
 	public List<Title> getFiltered(String field, String value, int fromCount) {
-		TypedQuery<Title> query = null;
+		Query query = null;
 		if(field.equals("type")) {
 			query = em.createNamedQuery("Title.filterType", Title.class);
 			query.setParameter("tp", value);
@@ -50,27 +51,102 @@ public class TitleRepositoryImpl implements TitleRepository {
 			query.setParameter("tp", Integer.parseInt(value));
 		}
 		else if(field.equals("genre")) {
-			query = em.createNamedQuery("Title.filterGenre", Title.class);
+			query = em.createNativeQuery("SELECT t.* FROM Title t, Title_Genre tg, Genre g "
+										+ "WHERE t.TITLE_ID=tg.TITLE_ID AND tg.genre_genreId=g.genreId "
+										+ "AND g.genreName=:tp");
 			query.setParameter("tp", value);
 		}
 		query.setFirstResult(fromCount);
 		query.setMaxResults(25);
-		return query.getResultList();
+		return (List<Title>)query.getResultList();
 	}
 
 	@Override
 	public List<Title> getSorted(String sortOrder, String field, int fromCount) {
 		TypedQuery<Title> query = null;
 		if(field.equals("imdbrating"))
-			query = em.createNamedQuery("Title.sortImdbRating", Title.class);
+			query = em.createNamedQuery("Title.sortImdbRating"+sortOrder.toLowerCase(), Title.class);
 		else if(field.equals("year"))
-			query = em.createNamedQuery("Title.sortImdbYear", Title.class);
+			query = em.createNamedQuery("Title.sortYear"+sortOrder.toLowerCase(), Title.class);
 		else if(field.equals("imdbvotes"))
-			query = em.createNamedQuery("Title.sortImdbVotes", Title.class);
-		query.setParameter("order", sortOrder.toUpperCase());
+			query = em.createNamedQuery("Title.sortImdbVotes"+sortOrder.toLowerCase(), Title.class);
 		query.setFirstResult(fromCount);
 		query.setMaxResults(25);
 		return query.getResultList();
+	}
+
+	@Override
+	public Title getDetails(String titleId) {
+		TypedQuery<Title> query = em.createNamedQuery("Title.findOne", Title.class);
+		query.setParameter("tId", titleId);
+		return query.getResultList().get(0);
+	}
+
+	@Override
+	@Transactional
+	public int rateTitle(String userId, String titleId, int starRating) {
+		TypedQuery<Title> query = em.createQuery("FROM Title t where t.titleId=:tId", Title.class);
+		query.setParameter("tId", titleId);
+		List<Title> titles = query.getResultList();
+		if(titles == null || titles.isEmpty())
+			return -1;
+		Title title = titles.get(0);
+		UserRating usrRate = null;
+		for(UserRating rate: title.getUserRating()) {
+			if (rate.getUser().getUserId().equals(userId)) {
+				usrRate = rate;
+				break;
+			}
+		}
+		if(usrRate == null) return -2;
+		Query query2 = em.createQuery("UPDATE UserRating u SET u.starRating=:starR "
+														+ "WHERE u.userRatingId=:ratingId");
+		query2.setParameter("starR", starRating);
+		query2.setParameter("ratingId", usrRate.getUserRatingId());
+		return query2.executeUpdate();
+	}
+
+	@Override
+	@Transactional
+	public int reviewTitle(String userId, String titleId, String userReview) {
+		TypedQuery<Title> query = em.createQuery("FROM Title t where t.titleId=:tId", Title.class);
+		query.setParameter("tId", titleId);
+		List<Title> titles = query.getResultList();
+		if(titles == null || titles.isEmpty())
+			return -1;
+		Title title = titles.get(0);
+		UserRating usrRate = null;
+		for(UserRating rate: title.getUserRating()) {
+			if (rate.getUser().getUserId().equals(userId)) {
+				usrRate = rate;
+				break;
+			}
+		}
+		if(usrRate == null) return -2;
+		Query query2 = em.createQuery("UPDATE UserRating u SET u.userReview=:userR "
+														+ "WHERE u.userRatingId=:ratingId");
+		query2.setParameter("userR", userReview);
+		query2.setParameter("ratingId", usrRate.getUserRatingId());
+		System.out.println(em.getProperties().toString());
+		//em.setProperty("javax.persistence.cache.retrieveMode", PersistenceUnitTransactionType.);
+		return query2.executeUpdate();
+	}
+
+	@Override
+	@Transactional
+	public int addNewTitle(Title title) {
+		System.out.println(title.getPlot());
+		return 0;
+	}
+
+	@Override
+	@Transactional
+	public int deleteTitle(String titleId) {
+		Query query2 = em.createQuery("DELETE FROM Title t WHERE t.titleId=:tId");
+		query2.setParameter("tId", titleId);
+		System.out.println(em.getProperties().toString());
+		//em.setProperty("javax.persistence.cache.retrieveMode", PersistenceUnitTransactionType.);
+		return query2.executeUpdate();
 	}
 
 }

@@ -3,7 +3,9 @@ package io.egen.movieflix.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,19 +53,36 @@ public class TitleController {
 		return service.getSortedTitles(authToken, sortOrder, field, fromCount);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, path = "/title/details")
-	public Title getDetails(@RequestHeader(value="ah") String authToken, String name) {
-		return service.getDetails(authToken, name);
+	@RequestMapping(method = RequestMethod.GET, path = "/title/{titleId}/details")
+	public Title getDetails(@RequestHeader(value="ah") String authToken, 
+			@PathVariable("titleId") String titleId) {
+		return service.getDetails(authToken, titleId);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, path = "/title/rate")
-	public void rateTitle(@RequestHeader(value="ah") String authToken, String titleId, String userId, int starRating) {
-		service.rateTitle(authToken, titleId, userId, starRating);
+	@RequestMapping(method = RequestMethod.POST, path = "/title/{titleId}/rate")
+	public int rateTitle(@RequestHeader(value="ah") String authToken, 
+			@PathVariable("titleId") String titleId, 
+			@RequestHeader("rating") int starRating) {
+		return service.rateTitle(authToken, titleId, starRating);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, path = "/title/review")
-	public void reviewTitle(@RequestHeader(value="ah") String authToken, String titleId, String userId, int userReview) {
-		service.reviewTitle(authToken, titleId, userId, userReview);
+	@RequestMapping(method = RequestMethod.POST, path = "/title/{titleId}/review")
+	public int reviewTitle(@RequestHeader(value="ah") String authToken, 
+			@PathVariable("titleId") String titleId, 
+			@RequestHeader("review") String userReview) {
+		return service.reviewTitle(authToken, titleId, userReview);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/title/add", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public int addNewTitle(@RequestHeader(value="ah") String authToken, 
+			@RequestBody Title newTitle) {
+		return service.addNewTitle(authToken, newTitle);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/title/{titleId}/delete")
+	public int deleteTitle(@RequestHeader(value="ah") String authToken, 
+			@PathVariable("titleId") String titleId) {
+		return service.deleteTitle(authToken, titleId);
 	}
 	
 }

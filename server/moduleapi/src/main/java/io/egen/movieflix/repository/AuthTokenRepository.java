@@ -1,7 +1,10 @@
 package io.egen.movieflix.repository;
 
+import io.egen.movieflix.entity.User;
+
+
 public interface AuthTokenRepository {
 
-	public boolean validateToken(String token);
+	public User validateToken(String token, boolean checkForAdmin);
 	
 }
