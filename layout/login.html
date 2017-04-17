@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="login.css">
+    <script src="script.js"></script>
+  </head>
+  
+  <body>
+      <div class="auth-form px-3" id="login">
+        <form accept-charset="UTF-8" action="/session" method="post">
+          <div style="margin:0;padding:0;display:inline">
+            <input name="utf8" value="✓" type="hidden">
+            <input name="authenticity_token" value="NkfUxAqJvaeu6BsepX2uAviPMUwWuhDbb0RJgOhaRtV7uIb0sPzdH4wMfgEVAqemGaY30H+zn2BG5OtRW8xfJw==" type="hidden">
+          </div>
+          <div class="auth-form-body mt-3">
+            <div class="mb-4 pb-3 border-bottom border-gray-light h4 text-normal text-center">
+              <p>Sign into <strong>MovieFlix</strong>
+            </div>
+            <strong>Username or email address</strong>
+            <input autocapitalize="off" autocorrect="off" autofocus="autofocus" class="form-control input-block" id="login_field" name="login" tabindex="1" type="text">
+            <strong>
+            Password <a href="/password_reset" class="label-link">Forgot password?</a>
+          </strong>
+            <input class="form-control form-control input-block" id="password" name="password" tabindex="2" type="password">
+            <input class="btn btn-primary btn-block" data-disable-with="Signing in…" name="commit" tabindex="3" value="Sign in" type="submit">
+          </div>
+        </form>
+  
+        <p class="create-account-callout mt-3">
+          New to MovieFlix?
+          <a href="/join?return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3D7e377e5657c4d5c332db%26redirect_uri%3Dhttp%253A%252F%252Fplnkr.co%252Fauth%252Fgithub%26scope%3Dgist&amp;source=oauth" data-ga-click="Sign in, switch to sign up">Create an account</a>.
+        </p>
+      </div>
+      <div class="modal-backdrop js-touch-events"></div>
+  </body>
+</html>
