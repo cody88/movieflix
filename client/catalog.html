@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/catalog.css">
+  <script src="services/title.service.js"></script>
+    <script src="controllers/title.controller.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<body>
+  <div id="mymainheader">
+    <div id="headerbox1">
+      <div id="headerbox2">
+        <div id="headertitlediv">
+          <h1 id="headertitleh">MOVIEFLIX</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="mainsite">
+    <div id="menudiv">
+      <ul class="menu">
+        <li><a href="#">Home</a>
+        <ul>
+            <li><a href="#" class="documents">Add a New Title</a></li>
+        </ul>
+        </li>
+        <li><a href="#">Admin</a>
+        <ul>
+            <li><a href="#" class="documents">Add a New Title</a></li>
+        </ul>
+        </li>
+        <li><a href="#">Account</a>
+        <ul>
+            <li><a href="#" class="documents">Logout</a></li>
+        </ul>
+        </li>
+      </ul>
+    </div>
+    <div id="mainsitecontainer" ng-controller="TitleController as titleVm">
+      <div class="spacer"></div>
+      <div id="optionsbox" class="mymargin">
+        <div id="sortbox">
+          <fieldset name="sortoptionenable" value="disable" disabled>
+              <legend><input type="checkbox"/>Sort by:</legend>
+              <input type="radio" name="sortoption" value="TopIMDBMoviesByRatings" />Top IMDB rated Movies 
+              <input type="radio" name="sortoption" value="TopIMDBTVByRatings" />Top IMDB rated TV-Series <br />
+              <input type="radio" name="sortoption" value="TopIMDBBothByRatings" />Top IMDB rated Movies and TV-Series <br />
+              <input type="radio" name="sortoption" value="TopBothByYear" />Year of Release 
+              <input type="radio" name="sortoption" value="TopBothByIMDBVotes" />Most Voted Movies and TV-Series in IMDB <br />
+              <input type="submit" value="Sort" />
+          </fieldset>
+        </div>
+        <div id="filterbox">
+          <div id="spacer"></div>
+          <fieldset name="filteroptionenable" value="disable" disabled>
+              <legend><input type="checkbox"/>Filter by:</legend>
+              <input type="checkbox" name="typefilteroption" value="type" class="leftleftfloat" /><div class="leftleftfloat">Type &nbsp;&nbsp;</div> 
+              <div id="dd" class="wrapper-dropdown-5" tabindex="1">&nbsp;
+    						<ul class="dropdown">
+    							<li><a href="#"><i class="icon-user"></i>Movies</a></li>
+    							<li><a href="#"><i class="icon-cog"></i>TV Series</a></li>
+    						</ul>
+    					</div><br/><br/>
+              <input type="checkbox" name="yearfilteroption" value="year" />Year&nbsp;&nbsp;
+              <input type="text" id="yearfilteroptiontext" value="Enter year here..." /><br/><div id="spacer"></div>
+              <input type="checkbox" name="genrefilteroption" value="genre" />Genre 
+              <input type="text" id="genrefilteroptiontext" value="Enter genre here..." /><br/><div id="spacer"></div>
+              <input type="checkbox" name="namefilteroption" value="genre" />Search by name
+              <input type="text" id="namefilteroptiontext" value="Enter name to search..." /><br/>
+              <input type="submit" value="Filter" />
+          </fieldset>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="sepline"></div>
+      <div class="spacer"></div>
+      <div id="cataloglist" class="divborder mymargin">
+        <table id="catalogtable">
+          <tr>
+            <td>
+              <a href="#">
+              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
+              <div id="cattitlename">How I Met Your Mother fdfdfdfdfdfd</div>
+               </a>
+              <button id="edittitlebutton">Edit</button>
+              <button id="deletetitlebutton">Delete</button>
+            </td>
+            <td>
+              <a href="#">
+              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
+              <div id="cattitlename">How I Met Your Mother</div>
+               </a>
+              <button id="edittitlebutton">Edit</button>
+              <button id="deletetitlebutton">Delete</button>
+            </td>
+            <td>
+              <a href="#">
+              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
+              <div id="cattitlename">How I Met Your Mother fdfdfdfdfdfd</div>
+               </a>
+              <button id="edittitlebutton">Edit</button>
+              <button id="deletetitlebutton">Delete</button>
+            </td>
+            <td>
+              <a href="#">
+              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
+              <div id="cattitlename">How I Met Your Mother</div>
+               </a>
+              <button id="edittitlebutton">Edit</button>
+              <button id="deletetitlebutton">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#">
+              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
+              <div id="cattitlename">How I Met Your Mother</div>
+               </a>
+              <button id="edittitlebutton">Edit</button>
+              <button id="deletetitlebutton">Delete</button>
+            </td>
+             <td>
+              <a href="#">
+              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
+              <div id="cattitlename">How I Met Your Mother</div>
+               </a>
+              <button id="edittitlebutton">Edit</button>
+              <button id="deletetitlebutton">Delete</button>
+            </td>
+          </tr>
+        </table>
+        <br/>
+        <div id="navbuttons" class="mymargin">
+          <button id="prevbutton" disabled>Previous Page</button>
+          <button id="nextbutton" disabled>Next Page</button>
+        </div>
+      </div>
+        
+    </div>
+  </div>
+</body>
+
+</html>
