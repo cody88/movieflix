@@ -39,7 +39,7 @@ import org.hibernate.annotations.GenericGenerator;
 })
 public class Title implements Serializable {
 
-	private static final long serialVersionUID = 3344316295338924751L;
+	private static final long serialVersionUID = 1689732318309064572L;
 
 	@Id
 	@GenericGenerator(name="movieflixUUID", strategy="uuid2")
@@ -302,5 +302,17 @@ public class Title implements Serializable {
 		if(this.userRating == null)
 			this.userRating = new ArrayList<UserRating>();
 		this.userRating.add(rating);
+	}
+	
+	public int removeUserRating(UserRating rating) {
+		if(this.userRating == null)
+			return 0;
+		for(UserRating rat: this.userRating) {
+			if(rat.getUserRatingId().equals(rating.getUserRatingId())) {
+				this.userRating.remove(rat);
+				return 1;
+			}
+		}
+		return 0;
 	}
 }

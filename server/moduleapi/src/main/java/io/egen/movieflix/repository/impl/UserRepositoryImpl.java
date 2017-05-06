@@ -6,10 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
+import io.egen.movieflix.entity.Title;
 import io.egen.movieflix.entity.User;
+import io.egen.movieflix.entity.UserRating;
 import io.egen.movieflix.repository.UserRepository;
 
 
@@ -43,17 +46,31 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
+	@Transactional
 	public User create(User user) {
 		em.persist(user);
 		return user;
 	}
 
 	@Override
+	@Transactional
 	public User update(User user) {
-		return em.merge(user);
+		em.merge(user);
+		TypedQuery<UserRating> query = em.createNamedQuery("UserRating.findAllRatingByUserId", UserRating.class);
+		query.setParameter("puserId", user.getUserId());
+		List<UserRating> ratings = query.getResultList();
+		for(UserRating rat: ratings) {
+			Title title = em.find(Title.class, rat.getTitleId());
+			title.removeUserRating(rat);
+			rat.setUser(user);
+			title.insertUserRating(rat);
+			em.merge(title);
+		}
+		return user;
 	}
 
 	@Override
+	@Transactional
 	public void delete(User user) {
 		em.remove(user);
 	}

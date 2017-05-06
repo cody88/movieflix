@@ -15,6 +15,7 @@ import io.egen.movieflix.entity.User;
 import io.egen.movieflix.entity.UserRating;
 import io.egen.movieflix.exception.BadRequestException;
 import io.egen.movieflix.exception.UserNotFoundException;
+import io.egen.movieflix.exception.UserRatingAlreadyExistsException;
 import io.egen.movieflix.repository.UserRatingRepository;
 
 
@@ -39,21 +40,26 @@ public class UserRatingRepositoryImpl implements UserRatingRepository {
 	}
 
 	@Override
+	@Transactional
 	public UserRating addUserRating(UserRating rating) {
-		TypedQuery<User> query = em.createNamedQuery("User.findById", User.class);
-		query.setParameter("puserId", rating.getUser().getUserId());
-		List<User> user = query.getResultList();
-		if(user==null || user.isEmpty())
+		User user = em.find(User.class, rating.getUser().getUserId());
+		if(user == null)
 			throw new UserNotFoundException("Bad UserId. Not found");
-		rating.setUser(user.get(0));
+		rating.setUser(user);
 		
-		TypedQuery<Title> query2 = em.createNamedQuery("Title.findOne", Title.class);
-		query2.setParameter("tId", rating.getTitleId());
-		List<Title> title = query2.getResultList();
-		if(title==null || title.isEmpty())
+		Title eTitle = em.find(Title.class, rating.getTitleId());
+		if(eTitle == null)
 			throw new BadRequestException("TitleId "+rating.getTitleId()+" Not found");
 		
-		Title eTitle = title.get(0);
+		// Check if rating already exists for this userId and titleId
+		TypedQuery<UserRating> query3 = em.createNamedQuery("UserRating.findRating", UserRating.class);
+		query3.setParameter("puserId", rating.getUser().getUserId());
+		query3.setParameter("ptitleId", rating.getTitleId());
+		List<UserRating> rat = query3.getResultList();
+		if(rat!=null && !rat.isEmpty())
+			throw new UserRatingAlreadyExistsException("UserRating with userId "+rating.getUser().getUserId()+
+					" and titleId "+rating.getTitleId()+" already exists");
+		
 		eTitle.insertUserRating(rating);
 		em.merge(eTitle);
 		// em.merge() doesn't set the userRatingId of 'rating', so fetching that.
@@ -68,6 +74,7 @@ public class UserRatingRepositoryImpl implements UserRatingRepository {
 	}
 
 	@Override
+	@Transactional
 	public UserRating updateUserRating(UserRating rating) {
 		TypedQuery<User> query = em.createNamedQuery("User.findById", User.class);
 		query.setParameter("puserId", rating.getUser().getUserId());

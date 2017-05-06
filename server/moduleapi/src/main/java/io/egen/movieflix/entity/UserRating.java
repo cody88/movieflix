@@ -2,6 +2,7 @@ package io.egen.movieflix.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,8 +19,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table
 @NamedQueries({
-	@NamedQuery(name="UserRating.findRating", query="SELECT u FROM UserRating u where u.titleId=:ptitleId"
-														+ " and u.user.userId=:puserId")
+	@NamedQuery(name="UserRating.findRating", query="SELECT u FROM UserRating u where u.titleId=:ptitleId and u.user.userId=:puserId"),
+	@NamedQuery(name="UserRating.findAllRatingByUserId", query="SELECT u FROM UserRating u where u.user.userId=:puserId")
 })
 public class UserRating implements Serializable {
 
@@ -31,7 +32,7 @@ public class UserRating implements Serializable {
 	@Column(name="USER_RATING_ID")
 	private String userRatingId;
 	
-	@OneToOne(targetEntity = User.class)
+	@OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
 	@JoinColumn(name="USER", referencedColumnName="USER_ID", nullable=false)
 	private User user;
 	//@ManyToOne(targetEntity = Title.class, cascade = CascadeType.ALL)
