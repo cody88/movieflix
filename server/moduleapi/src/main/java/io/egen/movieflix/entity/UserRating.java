@@ -1,21 +1,29 @@
 package io.egen.movieflix.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Proxy;
 
 
 @Entity
 @Table
-@Proxy(lazy=false)
-public class UserRating {
+@NamedQueries({
+	@NamedQuery(name="UserRating.findRating", query="SELECT u FROM UserRating u where u.titleId=:ptitleId"
+														+ " and u.user.userId=:puserId")
+})
+public class UserRating implements Serializable {
+
+	private static final long serialVersionUID = 2465960212839344527L;
 
 	@Id
 	@GenericGenerator(name="movieflixUUID", strategy="uuid2")
@@ -24,9 +32,10 @@ public class UserRating {
 	private String userRatingId;
 	
 	@OneToOne(targetEntity = User.class)
-	@JoinColumn(name="USER_ID", nullable=false)
+	@JoinColumn(name="USER", referencedColumnName="USER_ID", nullable=false)
 	private User user;
-	@JoinColumn(name="TITLE_ID", referencedColumnName="USER_RATING_ID", nullable=false)
+	//@ManyToOne(targetEntity = Title.class, cascade = CascadeType.ALL)
+	//@JoinColumn(name="TITLEID", referencedColumnName="TITLE_ID", nullable=false)
 	private String titleId;
 	private int starRating;
 	@Column(length=1000)

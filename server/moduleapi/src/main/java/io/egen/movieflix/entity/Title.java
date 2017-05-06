@@ -1,9 +1,11 @@
 package io.egen.movieflix.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -11,10 +13,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -24,19 +25,21 @@ import org.hibernate.annotations.GenericGenerator;
 @NamedQueries({
 	@NamedQuery(name="Title.findAll", query="FROM Title t"),
 	@NamedQuery(name="Title.findOne", query="FROM Title t WHERE t.titleId=:tId"),
-	@NamedQuery(name="Title.findTopImdb", query="FROM Title t WHERE t.type=:tp ORDER BY t.imdbInfo.imdbRating DESC"),
+	@NamedQuery(name="Title.findTopImdb", query="FROM Title t WHERE t.type=:tp ORDER BY t.imdbRating DESC"),
 	@NamedQuery(name="Title.filterType", query="FROM Title t WHERE t.type=:tp"),
 	@NamedQuery(name="Title.filterYear", query="FROM Title t WHERE t.year=:tp"),
 	/*@NamedQuery(name="Title.filterGenre", query="SELECT t FROM Title t, Genre g WHERE"
 											+ "t.genre.genreId=g.genreId AND g.genreName=:tp"),*/
-	@NamedQuery(name="Title.sortImdbRatingasc", query="FROM Title t ORDER BY t.imdbInfo.imdbRating"),
-	@NamedQuery(name="Title.sortImdbRatingdesc", query="FROM Title t ORDER BY t.imdbInfo.imdbRating DESC"),
+	@NamedQuery(name="Title.sortImdbRatingasc", query="FROM Title t ORDER BY t.imdbRating"),
+	@NamedQuery(name="Title.sortImdbRatingdesc", query="FROM Title t ORDER BY t.imdbRating DESC"),
 	@NamedQuery(name="Title.sortYearasc", query="FROM Title t ORDER BY t.year"),
 	@NamedQuery(name="Title.sortYeardesc", query="FROM Title t ORDER BY t.year DESC"),
-	@NamedQuery(name="Title.sortImdbVotesasc", query="FROM Title t ORDER BY t.imdbInfo.imdbVotes"),
-	@NamedQuery(name="Title.sortImdbVotesdesc", query="FROM Title t ORDER BY t.imdbInfo.imdbVotes DESC")
+	@NamedQuery(name="Title.sortImdbVotesasc", query="FROM Title t ORDER BY t.imdbVotes"),
+	@NamedQuery(name="Title.sortImdbVotesdesc", query="FROM Title t ORDER BY t.imdbVotes DESC")
 })
-public class Title {
+public class Title implements Serializable {
+
+	private static final long serialVersionUID = 3344316295338924751L;
 
 	@Id
 	@GenericGenerator(name="movieflixUUID", strategy="uuid2")
@@ -51,7 +54,7 @@ public class Title {
 	private int runtimeInMinutes;
 	@ElementCollection
     @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
-	private List<Genre> genre;
+	private List<String> genre;
 	@ElementCollection
     @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
 	private List<String> directors;
@@ -64,26 +67,28 @@ public class Title {
 	private String plot;
 	@ElementCollection
     @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
-	private List<Language> languages;
+	private List<String> languages;
 	private String country;
-	@ManyToOne(targetEntity = Award.class)
-	@JoinColumn(name="AWARD_ID")
-	private Award primaryAward;
+	
+	private String primaryAward;
 	private int primaryAwardCount;
 	private boolean primaryAwardWon;
 	private int otherWins;
 	private int otherNominations;
+	
 	private String posterLink;
 	private int metascore;
 	@Column(nullable=false)
 	private String type;
 	
-	@OneToOne(targetEntity = IMDBInfo.class)
-	@JoinColumn(name="IMDB_INFO_ID")
-	private IMDBInfo imdbInfo;
+	private String imdbId;
+	private double imdbRating;
+	private int imdbVotes;
 	
-	@ElementCollection
-    @CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
+	//@ElementCollection
+    //@CollectionTable(joinColumns=@JoinColumn(name="TITLE_ID"))
+	//@JoinColumn(name="UserRating", referencedColumnName="TITLE_ID")
+	@OneToMany(targetEntity = UserRating.class, cascade = CascadeType.ALL)
 	private List<UserRating> userRating;
 
 	
@@ -135,15 +140,6 @@ public class Title {
 		this.runtimeInMinutes = runtimeInMinutes;
 	}
 
-	public List<Genre> getGenre() {
-		return genre;
-	}
-
-	public void setGenre(List<Genre> genre) {
-		this.genre = new ArrayList<Genre>();
-		this.genre.addAll(genre);
-	}
-
 	public List<String> getDirectors() {
 		return directors;
 	}
@@ -179,12 +175,21 @@ public class Title {
 		this.plot = plot;
 	}
 
-	public List<Language> getLanguages() {
+	public List<String> getGenre() {
+		return genre;
+	}
+
+	public void setGenre(List<String> genre) {
+		this.genre = new ArrayList<String>();
+		this.genre.addAll(genre);
+	}
+
+	public List<String> getLanguages() {
 		return languages;
 	}
 
-	public void setLanguages(List<Language> languages) {
-		this.languages = new ArrayList<Language>();
+	public void setLanguages(List<String> languages) {
+		this.languages = new ArrayList<String>();
 		this.languages.addAll(languages);
 	}
 
@@ -196,11 +201,11 @@ public class Title {
 		this.country = country;
 	}
 
-	public Award getPrimaryAward() {
+	public String getPrimaryAward() {
 		return primaryAward;
 	}
 
-	public void setPrimaryAward(Award primaryAward) {
+	public void setPrimaryAward(String primaryAward) {
 		this.primaryAward = primaryAward;
 	}
 
@@ -260,12 +265,28 @@ public class Title {
 		this.type = type;
 	}
 
-	public IMDBInfo getImdbInfo() {
-		return imdbInfo;
+	public String getImdbId() {
+		return imdbId;
 	}
 
-	public void setImdbInfo(IMDBInfo imdbInfo) {
-		this.imdbInfo = imdbInfo;
+	public void setImdbId(String imdbId) {
+		this.imdbId = imdbId;
+	}
+
+	public double getImdbRating() {
+		return imdbRating;
+	}
+
+	public void setImdbRating(double imdbRating) {
+		this.imdbRating = imdbRating;
+	}
+
+	public int getImdbVotes() {
+		return imdbVotes;
+	}
+
+	public void setImdbVotes(int imdbVotes) {
+		this.imdbVotes = imdbVotes;
 	}
 
 	public List<UserRating> getUserRating() {
@@ -277,4 +298,9 @@ public class Title {
 		this.userRating.addAll(userRating);
 	}
 	
+	public void insertUserRating(UserRating rating) {
+		if(this.userRating == null)
+			this.userRating = new ArrayList<UserRating>();
+		this.userRating.add(rating);
+	}
 }

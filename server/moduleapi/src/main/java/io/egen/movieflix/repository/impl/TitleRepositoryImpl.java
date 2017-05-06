@@ -12,7 +12,10 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import io.egen.movieflix.entity.Title;
+import io.egen.movieflix.entity.User;
 import io.egen.movieflix.entity.UserRating;
+import io.egen.movieflix.exception.TitleAlreadyExistsException;
+import io.egen.movieflix.exception.UserNotFoundException;
 import io.egen.movieflix.repository.TitleRepository;
 
 
@@ -98,12 +101,27 @@ public class TitleRepositoryImpl implements TitleRepository {
 				break;
 			}
 		}
-		if(usrRate == null) return -2;
-		Query query2 = em.createQuery("UPDATE UserRating u SET u.starRating=:starR "
-														+ "WHERE u.userRatingId=:ratingId");
-		query2.setParameter("starR", starRating);
-		query2.setParameter("ratingId", usrRate.getUserRatingId());
-		return query2.executeUpdate();
+		if(usrRate == null) {
+			TypedQuery<User> query2 = em.createNamedQuery("User.findById", User.class);
+			query2.setParameter("puserId", userId);
+			List<User> usr = query2.getResultList();
+			if(usr == null || usr.isEmpty())
+				throw new UserNotFoundException("Bad userId. User not found");
+			
+			UserRating newRating = new UserRating();
+			newRating.setUser(usr.get(0));
+			newRating.setTitleId(titleId);
+			newRating.setStarRating(starRating);
+			//em.persist(newRating);
+			title.insertUserRating(newRating);
+			em.merge(title);
+			return 1;
+		}
+		else {
+			usrRate.setStarRating(starRating);
+			em.merge(usrRate);
+			return 1;
+		}
 	}
 
 	@Override
@@ -122,31 +140,52 @@ public class TitleRepositoryImpl implements TitleRepository {
 				break;
 			}
 		}
-		if(usrRate == null) return -2;
-		Query query2 = em.createQuery("UPDATE UserRating u SET u.userReview=:userR "
-														+ "WHERE u.userRatingId=:ratingId");
-		query2.setParameter("userR", userReview);
-		query2.setParameter("ratingId", usrRate.getUserRatingId());
-		System.out.println(em.getProperties().toString());
-		//em.setProperty("javax.persistence.cache.retrieveMode", PersistenceUnitTransactionType.);
-		return query2.executeUpdate();
+		if(usrRate == null) {
+			TypedQuery<User> query2 = em.createNamedQuery("User.findById", User.class);
+			query2.setParameter("puserId", userId);
+			List<User> usr = query2.getResultList();
+			if(usr == null || usr.isEmpty())
+				throw new UserNotFoundException("Bad userId. User not found");
+			
+			UserRating newRating = new UserRating();
+			newRating.setUser(usr.get(0));
+			newRating.setTitleId(titleId);
+			newRating.setUserReview(userReview);
+			//em.persist(newRating);
+			title.insertUserRating(newRating);
+			em.merge(title);
+			return 1;
+		}
+		else {
+			usrRate.setUserReview(userReview);
+			em.merge(usrRate);
+			return 1;
+		}
 	}
 
 	@Override
 	@Transactional
 	public int addNewTitle(Title title) {
-		System.out.println(title.getPlot());
-		return 0;
+		TypedQuery<Title> query = em.createQuery("FROM Title t where t.titleId=:tId", Title.class);
+		query.setParameter("tId", title.getTitleId());
+		List<Title> titles = query.getResultList();
+		if(titles == null || !titles.isEmpty()) { System.out.println("TRepo: titles is not null,"+titles.size()+","+title.getTitleId());
+			throw new TitleAlreadyExistsException("TitleId already exists");}
+		em.persist(title);
+		return 1;
 	}
 
 	@Override
 	@Transactional
 	public int deleteTitle(String titleId) {
-		Query query2 = em.createQuery("DELETE FROM Title t WHERE t.titleId=:tId");
-		query2.setParameter("tId", titleId);
-		System.out.println(em.getProperties().toString());
-		//em.setProperty("javax.persistence.cache.retrieveMode", PersistenceUnitTransactionType.);
-		return query2.executeUpdate();
+		TypedQuery<Title> query = em.createQuery("FROM Title t where t.titleId=:tId", Title.class);
+		query.setParameter("tId", titleId);
+		List<Title> titles = query.getResultList();
+		if(titles == null || titles.isEmpty())
+			return -1;
+		Title title = titles.get(0);
+		em.remove(title);
+		return 1;
 	}
 
 }

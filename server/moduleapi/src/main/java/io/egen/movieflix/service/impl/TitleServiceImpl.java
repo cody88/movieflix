@@ -24,8 +24,9 @@ public class TitleServiceImpl implements TitleService {
 	@Autowired
 	private AuthTokenRepository authrepository;
 	
-	public TitleServiceImpl(TitleRepository repository) {
+	public TitleServiceImpl(TitleRepository repository, AuthTokenRepository arepository) {
 		this.repository = repository;
+		this.authrepository = arepository;
 	}
 	
 	@Override

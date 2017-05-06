@@ -76,6 +76,7 @@ public class TitleController {
 	@RequestMapping(method = RequestMethod.POST, path = "/title/add", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public int addNewTitle(@RequestHeader(value="ah") String authToken, 
 			@RequestBody Title newTitle) {
+		System.out.println("TitleController:"+newTitle.getTitleName()+","+newTitle.getTitleId());
 		return service.addNewTitle(authToken, newTitle);
 	}
 	

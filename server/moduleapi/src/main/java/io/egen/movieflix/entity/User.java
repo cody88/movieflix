@@ -6,8 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -19,7 +17,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Table
 @NamedQueries({
 	@NamedQuery(name="User.findAll", query="SELECT u FROM User u ORDER BY u.firstName"),
-	@NamedQuery(name="User.findByEmail", query="SELECT u FROM User u where u.email=:pEmail")
+	@NamedQuery(name="User.findByEmail", query="SELECT u FROM User u where u.email=:pEmail"),
+	@NamedQuery(name="User.findById", query="SELECT u FROM User u where u.userId=:puserId")
 })
 public class User implements Serializable {
 
@@ -35,9 +34,11 @@ public class User implements Serializable {
 	private String lastName;
 	@Column(unique = true, nullable=false)
 	private String email;
-	@ManyToOne(targetEntity = Address.class)
-	@JoinColumn(name="ADDRESS_ID")
-	private Address address;
+	private String street1;
+	private String street2;
+	private String city;
+	private String state;
+	private String zipcode;
 	
 	
 	public String getUserId() {
@@ -72,12 +73,44 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public Address getAddress() {
-		return address;
+	public String getStreet1() {
+		return street1;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setStreet1(String street1) {
+		this.street1 = street1;
+	}
+
+	public String getStreet2() {
+		return street2;
+	}
+
+	public void setStreet2(String street2) {
+		this.street2 = street2;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 
 }

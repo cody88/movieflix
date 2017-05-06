@@ -6,13 +6,13 @@ import io.egen.movieflix.entity.User;
 
 public interface UserService {
 
-	public List<User> findAll();
+	public List<User> findAll(String authToken);
 
-	public User findOne(String id);
+	public User findOne(String authToken, String id);
 
-	public User create(User user);
+	public User create(String authToken, User user);
 
-	public User update(String id, User user);
+	public User update(String authToken, String id, User user);
 
-	public void delete(String id);
+	public void delete(String authToken, String id);
 }
