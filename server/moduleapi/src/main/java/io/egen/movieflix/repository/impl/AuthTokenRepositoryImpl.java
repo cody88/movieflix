@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
@@ -30,6 +31,26 @@ public class AuthTokenRepositoryImpl implements AuthTokenRepository {
 				return atoken.get(0).getUser();
 		}
 		return null;
+	}
+	
+	@Override
+	@Transactional
+	public AuthToken addNewToken(User user, String role) {
+		AuthToken newToken = new AuthToken();
+		newToken.setUser(user);
+		newToken.setRole(role);
+		em.persist(newToken);
+		return newToken;
+	}
+
+	@Override
+	@Transactional
+	public int removeToken(String userId) {
+		TypedQuery<AuthToken> query = em.createNamedQuery("AuthToken.findByUserId", AuthToken.class);
+		query.setParameter("userId", userId);
+		List<AuthToken> atoken = query.getResultList();
+		em.remove(atoken.get(0));
+		return 2;
 	}
 
 }

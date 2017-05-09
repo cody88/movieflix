@@ -17,5 +17,5 @@ public interface UserRepository {
 
 	public User update(User user);
 
-	public void delete(User user);
+	public int delete(User user);
 }

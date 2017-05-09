@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import io.egen.movieflix.entity.Title;
@@ -24,6 +25,12 @@ public class TitleRepositoryImpl implements TitleRepository {
 
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	private EntityManager em;
+	
+	@Override
+	public void entEvict(String titleId) {
+		Title eTitle = em.find(Title.class, titleId);
+		em.unwrap(Session.class).evict(eTitle);
+	}
 	
 	@Override
 	public List<Title> getCatalog(int fromCount) {

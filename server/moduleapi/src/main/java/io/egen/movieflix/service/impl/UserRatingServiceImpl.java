@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import io.egen.movieflix.entity.UserRating;
 import io.egen.movieflix.exception.AuthorizationException;
 import io.egen.movieflix.repository.AuthTokenRepository;
+import io.egen.movieflix.repository.TitleRepository;
 import io.egen.movieflix.repository.UserRatingRepository;
 import io.egen.movieflix.service.UserRatingService;
 
@@ -19,10 +20,14 @@ public class UserRatingServiceImpl implements UserRatingService {
 	private UserRatingRepository repository;
 	@Autowired
 	private AuthTokenRepository authrepository;
+	@Autowired
+	private TitleRepository titlerepository;
 	
-	public UserRatingServiceImpl(UserRatingRepository repository, AuthTokenRepository arepository) {
+	public UserRatingServiceImpl(UserRatingRepository repository, AuthTokenRepository arepository,
+			TitleRepository titlerepository) {
 		this.repository = repository;
 		this.authrepository = arepository;
+		this.titlerepository = titlerepository;
 	}
 	
 	@Override
@@ -36,16 +41,20 @@ public class UserRatingServiceImpl implements UserRatingService {
 	@Override
 	@Transactional
 	public UserRating addUserRating(String authToken, UserRating rating) {
-		if(authrepository.validateToken(authToken, false) != null)
+		if(authrepository.validateToken(authToken, false) != null) {
+			titlerepository.entEvict(rating.getTitleId());
 			return repository.addUserRating(rating);
+		}
 		throw new AuthorizationException("Unauthorized access: User could not be authenticated");
 	}
 
 	@Override
 	@Transactional
 	public UserRating updateUserRating(String authToken, UserRating rating) {
-		if(authrepository.validateToken(authToken, false) != null)
+		if(authrepository.validateToken(authToken, false) != null) {
+			titlerepository.entEvict(rating.getTitleId());
 			return repository.updateUserRating(rating);
+		}
 		throw new AuthorizationException("Unauthorized access: User could not be authenticated");
 	}
 

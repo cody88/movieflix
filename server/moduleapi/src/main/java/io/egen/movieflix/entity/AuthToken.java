@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
@@ -11,10 +12,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table
 @NamedQueries({
-	@NamedQuery(name="AuthToken.findToken", query="FROM AuthToken t where t.authToken=:ah")
+	@NamedQuery(name="AuthToken.findToken", query="FROM AuthToken t where t.authToken=:ah"),
+	@NamedQuery(name="AuthToken.findByUserId", query="FROM AuthToken t where t.user.userId=:userId")
 })
 public class AuthToken implements Serializable {
 
@@ -28,6 +32,8 @@ public class AuthToken implements Serializable {
 	@Column(nullable=false)
 	private String role;
 	@Column(nullable=false)
+	@GenericGenerator(name="movieflixUUID", strategy="uuid2")
+	@GeneratedValue(generator="movieflixUUID")
 	private String authToken;
 	
 	public User getUser() {

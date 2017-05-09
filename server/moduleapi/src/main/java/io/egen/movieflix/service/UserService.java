@@ -14,5 +14,5 @@ public interface UserService {
 
 	public User update(String authToken, String id, User user);
 
-	public void delete(String authToken, String id);
+	public int delete(String authToken, String id);
 }

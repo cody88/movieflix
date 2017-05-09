@@ -52,7 +52,9 @@ public class UserServiceImpl implements UserService {
 		if (existing != null) {
 			throw new UserAlreadyExistsException("User with email "+user.getEmail()+" already exists");
 		}
-		return repository.create(user);
+		user = repository.create(user);
+		authrepository.addNewToken(user, "user");
+		return user;
 	}
 
 	@Override
@@ -69,13 +71,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void delete(String authToken, String id) {
+	public int delete(String authToken, String id) {
 		if(authrepository.validateToken(authToken, true) == null)
 			throw new AuthorizationException("Unauthorized access: User could not be authenticated");
 		User existing = repository.findOne(id);
 		if (existing == null) {
 			throw new UserNotFoundException("User with id "+id+" not found");
 		}
-		repository.delete(existing);
+		return authrepository.removeToken(id) + repository.delete(existing);
 	}
 }

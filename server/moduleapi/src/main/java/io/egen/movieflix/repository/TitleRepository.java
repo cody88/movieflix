@@ -7,6 +7,8 @@ import io.egen.movieflix.entity.Title;
 
 public interface TitleRepository {
 	
+	public void entEvict(String titleId); 
+	
 	public List<Title> getCatalog(int fromCount);
 	
 	public List<Title> getTopIMDB(String type, int fromCount);

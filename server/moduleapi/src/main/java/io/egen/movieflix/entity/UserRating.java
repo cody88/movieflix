@@ -2,7 +2,6 @@ package io.egen.movieflix.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +31,7 @@ public class UserRating implements Serializable {
 	@Column(name="USER_RATING_ID")
 	private String userRatingId;
 	
-	@OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = User.class)
 	@JoinColumn(name="USER", referencedColumnName="USER_ID", nullable=false)
 	private User user;
 	//@ManyToOne(targetEntity = Title.class, cascade = CascadeType.ALL)

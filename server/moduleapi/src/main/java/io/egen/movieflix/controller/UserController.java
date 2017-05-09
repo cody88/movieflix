@@ -48,7 +48,7 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, path = "/{id}/delete")
-	public void delete(@RequestHeader(value="ah") String authToken, @PathVariable("id") String id) {
-		service.delete(authToken, id);
+	public int delete(@RequestHeader(value="ah") String authToken, @PathVariable("id") String id) {
+		return service.delete(authToken, id);
 	}
 }

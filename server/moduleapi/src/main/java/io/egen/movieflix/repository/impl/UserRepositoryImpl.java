@@ -8,11 +8,13 @@ import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import io.egen.movieflix.entity.Title;
 import io.egen.movieflix.entity.User;
 import io.egen.movieflix.entity.UserRating;
+import io.egen.movieflix.repository.TitleRepository;
 import io.egen.movieflix.repository.UserRepository;
 
 
@@ -21,6 +23,13 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	private EntityManager em;
+	
+	@Autowired
+	TitleRepository titlerepository;
+	
+	public UserRepositoryImpl(TitleRepository titlerepository) {
+		this.titlerepository = titlerepository;
+	}
 
 	@Override
 	public List<User> findAll() {
@@ -65,14 +74,25 @@ public class UserRepositoryImpl implements UserRepository {
 			rat.setUser(user);
 			title.insertUserRating(rat);
 			em.merge(title);
+			titlerepository.entEvict(title.getTitleId());
 		}
 		return user;
 	}
 
 	@Override
 	@Transactional
-	public void delete(User user) {
+	public int delete(User user) {
+		TypedQuery<UserRating> query = em.createNamedQuery("UserRating.findAllRatingByUserId", UserRating.class);
+		query.setParameter("puserId", user.getUserId());
+		List<UserRating> ratings = query.getResultList();
+		for(UserRating rat: ratings) {
+			Title title = em.find(Title.class, rat.getTitleId());
+			title.removeUserRating(rat);
+			em.merge(title);
+			titlerepository.entEvict(title.getTitleId());
+		}
 		em.remove(user);
+		return 1;
 	}
 	
 }

@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
+
 import io.egen.movieflix.entity.Title;
 import io.egen.movieflix.entity.User;
 import io.egen.movieflix.entity.UserRating;
@@ -22,7 +23,7 @@ import io.egen.movieflix.repository.UserRatingRepository;
 @Repository
 public class UserRatingRepositoryImpl implements UserRatingRepository {
 
-	@PersistenceContext(type = PersistenceContextType.EXTENDED)
+	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
 	private EntityManager em;
 	
 	@Override
@@ -35,7 +36,7 @@ public class UserRatingRepositoryImpl implements UserRatingRepository {
 		if (!userRating.isEmpty()) {
 			return userRating.get(0);
 		} else {
-			return null;
+			throw new BadRequestException("UserRating for UserId "+userId+" not found");
 		}
 	}
 
@@ -76,25 +77,22 @@ public class UserRatingRepositoryImpl implements UserRatingRepository {
 	@Override
 	@Transactional
 	public UserRating updateUserRating(UserRating rating) {
-		TypedQuery<User> query = em.createNamedQuery("User.findById", User.class);
-		query.setParameter("puserId", rating.getUser().getUserId());
-		List<User> user = query.getResultList();
-		if(user==null || user.isEmpty())
+		User user = em.find(User.class, rating.getUser().getUserId());
+		if(user == null)
 			throw new UserNotFoundException("Bad UserId. Not found");
-		rating.setUser(user.get(0));
+		rating.setUser(user);
 		
-		TypedQuery<Title> query2 = em.createNamedQuery("Title.findOne", Title.class);
-		query2.setParameter("tId", rating.getTitleId());
-		List<Title> title = query2.getResultList();
-		if(title==null || title.isEmpty())
+		Title eTitle = em.find(Title.class, rating.getTitleId());
+		if(eTitle == null)
 			throw new BadRequestException("TitleId "+rating.getTitleId()+" Not found");
-		Title eTitle = title.get(0);
 		
 		for(UserRating urating: eTitle.getUserRating()) {
 			if(urating.getTitleId().equals(rating.getTitleId()) &&
 					urating.getUser().getUserId().equals(rating.getUser().getUserId())) {
-				urating.setStarRating(rating.getStarRating());
-				urating.setUserReview(rating.getUserReview());
+				eTitle.removeUserRating(urating);
+				if(rating.getStarRating() > 0) urating.setStarRating(rating.getStarRating());
+				if(rating.getUserReview() != null) urating.setUserReview(rating.getUserReview());
+				eTitle.insertUserRating(urating);
 				break;
 			}
 		}
