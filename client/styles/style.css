@@ -4,7 +4,7 @@
   height: 350px;
   left: 0;
   top: 0;
-  background: black url(https://static.wixstatic.com/media/cfebc7dc29d74cb8b159406c1bd99705.jpg/v1/fill/w_1292,h_356,al_c,q_85,usm_0.66_1.00_0.01/cfebc7dc29d74cb8b159406c1bd99705.jpg) left repeat;
+  background: black url(../images/titleBgrnd.jpg) left repeat;
 }
 
 #headerbox1 {
@@ -39,7 +39,7 @@
 
 body {
   background-size: cover;
-  background: black url("https://static.wixstatic.com/media/bfb402ab0f4248c7a9af74f382104f88.jpg/v1/fill/w_1920,h_1080,al_c,q_85/bfb402ab0f4248c7a9af74f382104f88.jpg");
+  background: black url(../images/siteBgrnd.jpg);
 }
 
 #mainsite {
@@ -182,9 +182,9 @@ body {
  
 .menu ul li:last-child a { border: none; }
 
-.menu a.documents { background: url(../img/docs.png) no-repeat 6px center; }
-.menu a.messages { background: url(../img/bubble.png) no-repeat 6px center; }
-.menu a.signout { background: url(../img/arrow.png) no-repeat 6px center; }
+/*.menu a.documents { background: url(../images/docs.png) no-repeat 6px center; }
+.menu a.messages { background: url(../images/bubble.png) no-repeat 6px center; }
+.menu a.signout { background: url(../images/arrow.png) no-repeat 6px center; }*/
 
 .spacer {
   height: 20px;

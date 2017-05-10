@@ -5,27 +5,29 @@
         .module('movieflix')
         .controller('TitleController', TitleController);
 
-    TitleController.$inject = ['titleService'];
+    TitleController.$inject = ['titleService', '$routeParams'];
 
-    function TitleController(titleService) {
+    function TitleController(titleService, $routeParams) {
         var titleVm = this;
 
-        init();
+        titleVm.loadData = loadData;
+        //init();
 
-        function init() {
-            console.log('in TitleController');
+        function loadData() {
+            console.log('in TitleController.loadData()');
 
             /*userListVm.sorter = {
                 sortBy: 'firstName',
                 sortOrder: false
             };*/
 
-            titleService.getCatalog(0)
+
+            titleService.getCatalog(0)//$routeParams.id)
                 .then(function(data) {
-                    titleVm.users = data;
+                    titleVm.titles = data;
                 })
-                .catch(function(error) {
-                    console.log(error);
+                .catch(function(data) {
+                    console.log(data);
                 });
         }
     }

@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="movieflix">
 
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>MovieFlix Catalog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/catalog.css">
-  <script src="services/title.service.js"></script>
-    <script src="controllers/title.controller.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-loader/angular-loader.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="js/app.js"></script>
+    <script src="controllers/title.controller.js"></script>
+    <script src="services/title.service.js"></script>
 </head>
 
-<body>
+<body ng-controller="TitleController as titleVm">
   <div id="mymainheader">
     <div id="headerbox1">
       <div id="headerbox2">
@@ -39,7 +47,7 @@
         </li>
       </ul>
     </div>
-    <div id="mainsitecontainer" ng-controller="TitleController as titleVm">
+    <div id="mainsitecontainer">
       <div class="spacer"></div>
       <div id="optionsbox" class="mymargin">
         <div id="sortbox">
@@ -77,60 +85,9 @@
       <div class="spacer"></div>
       <div class="sepline"></div>
       <div class="spacer"></div>
-      <div id="cataloglist" class="divborder mymargin">
+      <div id="cataloglist" class="divborder mymargin" ng-init="titleVm.loadData()">
         <table id="catalogtable">
-          <tr>
-            <td>
-              <a href="#">
-              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
-              <div id="cattitlename">How I Met Your Mother fdfdfdfdfdfd</div>
-               </a>
-              <button id="edittitlebutton">Edit</button>
-              <button id="deletetitlebutton">Delete</button>
-            </td>
-            <td>
-              <a href="#">
-              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
-              <div id="cattitlename">How I Met Your Mother</div>
-               </a>
-              <button id="edittitlebutton">Edit</button>
-              <button id="deletetitlebutton">Delete</button>
-            </td>
-            <td>
-              <a href="#">
-              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
-              <div id="cattitlename">How I Met Your Mother fdfdfdfdfdfd</div>
-               </a>
-              <button id="edittitlebutton">Edit</button>
-              <button id="deletetitlebutton">Delete</button>
-            </td>
-            <td>
-              <a href="#">
-              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
-              <div id="cattitlename">How I Met Your Mother</div>
-               </a>
-              <button id="edittitlebutton">Edit</button>
-              <button id="deletetitlebutton">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#">
-              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
-              <div id="cattitlename">How I Met Your Mother</div>
-               </a>
-              <button id="edittitlebutton">Edit</button>
-              <button id="deletetitlebutton">Delete</button>
-            </td>
-             <td>
-              <a href="#">
-              <img class="catalogimage" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
-              <div id="cattitlename">How I Met Your Mother</div>
-               </a>
-              <button id="edittitlebutton">Edit</button>
-              <button id="deletetitlebutton">Delete</button>
-            </td>
-          </tr>
+            <script src="js/catalog.js"></script>
         </table>
         <br/>
         <div id="navbuttons" class="mymargin">
