@@ -17,7 +17,7 @@
     <script src="services/title.service.js"></script>
 </head>
 
-<body ng-controller="TitleController as titleVm">
+<body>
   <div id="mymainheader">
     <div id="headerbox1">
       <div id="headerbox2">
@@ -47,7 +47,7 @@
         </li>
       </ul>
     </div>
-    <div id="mainsitecontainer">
+    <div id="mainsitecontainer" ng-controller="TitleController as titleVm">
       <div class="spacer"></div>
       <div id="optionsbox" class="mymargin">
         <div id="sortbox">
@@ -85,9 +85,8 @@
       <div class="spacer"></div>
       <div class="sepline"></div>
       <div class="spacer"></div>
-      <div id="cataloglist" class="divborder mymargin" ng-init="titleVm.loadData()">
+      <div id="cataloglist" class="divborder mymargin" ng-init="titleVm.populateGrid()">
         <table id="catalogtable">
-            <script src="js/catalog.js"></script>
         </table>
         <br/>
         <div id="navbuttons" class="mymargin">

@@ -18,13 +18,13 @@
 
     function moduleConfig($routeProvider) {
         $routeProvider
-            .when('/catalog/:fromCount', {
-                templateUrl: 'user-list.tmpl.html',
+            .when('/catalog.html', {
+                templateUrl: 'catalog.html',
                 controller: 'TitleController',
                 controllerAs: 'titleVm'
             })
-            .when('/catalog/topimdb/:type/:fromCount', {
-                templateUrl: 'user-detail.tmpl.html',
+            .when('/details.html', {
+                templateUrl: 'details.html',
                 controller: 'TitleController',
                 controllerAs: 'titleVm'
             })

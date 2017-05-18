@@ -1,9 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="movieflix">
 
 <head>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>MovieFlix Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles/style.css">
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-loader/angular-loader.js"></script>
+  <script src="bower_components/angular-messages/angular-messages.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="js/app.js"></script>
+  <script src="controllers/title.controller.js"></script>
+  <script src="services/title.service.js"></script>
 </head>
 
 <body>
@@ -35,7 +45,7 @@
         </li>
       </ul>
     </div>
-    <div id="mainsitecontainer">
+    <div id="mainsitecontainer" ng-controller="TitleController as titleVm">
       <div class="spacer"></div>
       <div class="wrapper">
         <div id="titleimage">
@@ -43,7 +53,7 @@
         </div>
         <div id="maindetails">
           <div id="titlename">
-            <span style="font-weight:bold;">Title: </span>How I Met Your Mother (2005)
+            <span style="font-weight:bold;">Title: </span>{{titleVm.titles[0].titleName}} ({{titleVm.titles[0].year}})
           </div>
           <div id="ratinggenre">
             <span style="color:#808080">TV-14 &nbsp;Comedy|Romance</span>
