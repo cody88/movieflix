@@ -53,6 +53,8 @@ body {
   position: relative;
   width: 80%;
   margin: auto;
+  padding: 5px;
+  align: center;
   background-color: rgba(249, 240, 187, 1);
 }
 

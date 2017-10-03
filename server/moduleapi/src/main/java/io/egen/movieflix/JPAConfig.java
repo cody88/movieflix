@@ -32,9 +32,9 @@ public class JPAConfig {
 	public DataSource getDatasource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		ds.setUrl("jdbc:mysql://localhost:3306/movieflix?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Chicago");
+		ds.setUrl("jdbc:mysql://localhost:3306/movieflix?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Kolkata");
 		ds.setUsername("root");
-		ds.setPassword("kdiq2ifhf278");
+		ds.setPassword("ri39FH4HjWh");
 		return ds;
 	}
 

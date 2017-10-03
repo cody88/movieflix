@@ -12,9 +12,11 @@
     <script src="bower_components/angular-loader/angular-loader.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="https://use.fontawesome.com/68f4c492b0.js"></script>
     <script src="js/app.js"></script>
     <script src="controllers/title.controller.js"></script>
     <script src="services/title.service.js"></script>
+    <script src="js/common.js"></script>
 </head>
 
 <body>
@@ -49,36 +51,37 @@
     </div>
     <div id="mainsitecontainer" ng-controller="TitleController as titleVm">
       <div class="spacer"></div>
+      <div class="spacer"></div>
       <div id="optionsbox" class="mymargin">
         <div id="sortbox">
-          <fieldset name="sortoptionenable" value="disable" disabled>
-              <legend><input type="checkbox"/>Sort by:</legend>
-              <input type="radio" name="sortoption" value="TopIMDBMoviesByRatings" />Top IMDB rated Movies 
-              <input type="radio" name="sortoption" value="TopIMDBTVByRatings" />Top IMDB rated TV-Series <br />
-              <input type="radio" name="sortoption" value="TopIMDBBothByRatings" />Top IMDB rated Movies and TV-Series <br />
-              <input type="radio" name="sortoption" value="TopBothByYear" />Year of Release 
-              <input type="radio" name="sortoption" value="TopBothByIMDBVotes" />Most Voted Movies and TV-Series in IMDB <br />
-              <input type="submit" value="Sort" />
+          <fieldset id="sortoptionenable" disabled="true">
+              <legend><input type="checkbox" ng-checked="false" ng-click="titleVm.toggleDisabled('sortoptionenable')"/>Sort by:</legend>
+              <input type="radio" id="sortmoviesimdb" ng-model="titleVm.sortoption" value="sortmoviesimdb" />Top IMDB rated Movies 
+              <input type="radio" id="sorttvimdb" ng-model="titleVm.sortoption" value="sorttvimdb" />Top IMDB rated TV-Series <br />
+              <input type="radio" id="sortbothimdb" ng-model="titleVm.sortoption" value="sortbothimdb" />Top IMDB rated Movies and TV-Series <br />
+              <input type="radio" id="sortbothyearrelease" ng-model="titleVm.sortoption" value="sortbothyearrelease" />Year of Release 
+              <input type="radio" id="sortbothvotes" ng-model="titleVm.sortoption" value="sortbothvotes" />Most Voted Movies and TV-Series in IMDB <br />
+              <input type="submit" value="Sort" ng-click="titleVm.mySort()" />
           </fieldset>
         </div>
         <div id="filterbox">
           <div id="spacer"></div>
-          <fieldset name="filteroptionenable" value="disable" disabled>
-              <legend><input type="checkbox"/>Filter by:</legend>
+          <fieldset id="filteroptionenable" disabled="true">
+              <legend><input type="checkbox" ng-checked="false" ng-click="titleVm.toggleDisabled('filteroptionenable')" />Filter by:</legend>
               <input type="checkbox" name="typefilteroption" value="type" class="leftleftfloat" /><div class="leftleftfloat">Type &nbsp;&nbsp;</div> 
-              <div id="dd" class="wrapper-dropdown-5" tabindex="1">&nbsp;
+              <div id="dd" class="wrapper-dropdown-5" tabindex="1" onClick="toggleOptions('dd')">&nbsp;
     						<ul class="dropdown">
-    							<li><a href="#"><i class="icon-user"></i>Movies</a></li>
-    							<li><a href="#"><i class="icon-cog"></i>TV Series</a></li>
+    							<li><a href="#"><i class="fa fa-video-camera" aria-hidden="true"></i>Movies</a></li>
+    							<li><a href="#"><i class="fa fa-television" aria-hidden="true"></i>TV Series</a></li>
     						</ul>
     					</div><br/><br/>
-              <input type="checkbox" name="yearfilteroption" value="year" />Year&nbsp;&nbsp;
-              <input type="text" id="yearfilteroptiontext" value="Enter year here..." /><br/><div id="spacer"></div>
-              <input type="checkbox" name="genrefilteroption" value="genre" />Genre 
-              <input type="text" id="genrefilteroptiontext" value="Enter genre here..." /><br/><div id="spacer"></div>
-              <input type="checkbox" name="namefilteroption" value="genre" />Search by name
-              <input type="text" id="namefilteroptiontext" value="Enter name to search..." /><br/>
-              <input type="submit" value="Filter" />
+              <input type="checkbox" id="yearfilteroption" value="year" ng-checked="false" />Year&nbsp;&nbsp;
+              <input type="text" id="yearfilteroptiontext" placeholder="Enter year here..." /><br/><div id="spacer"></div>
+              <input type="checkbox" id="genrefilteroption" value="genre" ng-checked="false" />Genre 
+              <input type="text" id="genrefilteroptiontext" placeholder="Enter genre here..." /><br/><div id="spacer"></div>
+              <input type="checkbox" id="namefilteroption" value="genre" ng-checked="false" />Search by name
+              <input type="text" id="namefilteroptiontext" placeholder="Enter name to search..." /><br/>
+              <input type="submit" value="Filter"  ng-click="titleVm.myFilterF()" />
           </fieldset>
         </div>
       </div>

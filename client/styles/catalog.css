@@ -4,14 +4,14 @@
 }
 
 .mymargin {
-  margin-left: 20px;
-  margin-right: 20px;
-  padding: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 0px;
 }
 
 #optionsbox, #cataloglist, #catalogtable, #navbuttons {
   position: relative;
-  width: 93%;
+  width: 98%;
 }
 
 #navbuttons {
@@ -39,20 +39,35 @@
   clear: both;
 }
 
-table tr td {
+table td {
   position: relative;
   min-width: 25%;
-  width: 25%;
-  max-height: 250px;
+  max-width: 25%;
+  max-height: 300px;
   margin: 0 auto;
   vertical-align: top;
   text-align: center;
-  padding: 10px;
+}
+
+table {
+	padding: 10px;
+}
+
+tr {
+	position: relative;
+	width: 100%;
+	margin: 0 auto;
 }
 
 .catalogimage {
   position: relative;
   width: 80%;
+  max-height: 282px;
+  max-width: 190px;
+}
+
+#edittitlebutton {
+  align: center;
 }
 
 #deletetitlebutton {
@@ -73,11 +88,11 @@ table tr td {
     box-shadow: 0 1px 0 rgba(0,0,0,0.2);
     cursor: pointer;
     outline: none;
-    -webkit-transition: all 0.3s ease-out;
-    -moz-transition: all 0.3s ease-out;
-    -ms-transition: all 0.3s ease-out;
-    -o-transition: all 0.3s ease-out;
-    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    -ms-transition: all 0.4s ease-out;
+    -o-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
 }
 
 .wrapper-dropdown-5:after { /* Little arrow */
@@ -106,12 +121,13 @@ table tr td {
     border: 1px solid rgba(0,0,0,0.2);
     border-top: none;
     border-bottom: none;
+    padding: 0 10px;
     list-style: none;
-    -webkit-transition: all 0.3s ease-out;
-    -moz-transition: all 0.3s ease-out;
-    -ms-transition: all 0.3s ease-out;
-    -o-transition: all 0.3s ease-out;
-    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    -ms-transition: all 0.4s ease-out;
+    -o-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
 
     /* Hiding */
     max-height: 0;
@@ -119,7 +135,7 @@ table tr td {
 }
 
 .wrapper-dropdown-5 .dropdown li {
-    padding: 0 10px ;
+    padding: 0;
 }
 
 .wrapper-dropdown-5 .dropdown li a {
@@ -127,7 +143,7 @@ table tr td {
     text-decoration: none;
     color: #333;
     padding: 10px 0;
-    transition: all 0.3s ease-out;
+    transition: all 0.4s ease-out;
     border-bottom: 1px solid #e6e8ea;
 }
 
