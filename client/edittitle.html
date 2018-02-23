@@ -1,9 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="movieflix">
 
 <head>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>MovieFlix: Edit Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles/style.css">
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-loader/angular-loader.js"></script>
+  <script src="bower_components/angular-messages/angular-messages.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="js/app.js"></script>
+  <script src="controllers/title.controller.js"></script>
+  <script src="services/title.service.js"></script>
 </head>
 
 <body>
@@ -15,27 +25,27 @@
       </div>
     </div>
   </div>
-  <div id="mainsite">
+  <div id="mainsite" ng-controller="TitleController as titleVm">
     <div id="menudiv">
       <ul class="menu">
         <li><a href="#">Home</a>
         <ul>
-            <li><a href="#" class="documents">Add a New Title</a></li>
+            <li><a href="#"><i class="documents"></i>{placeholder}</a></li>
         </ul>
         </li>
         <li><a href="#">Admin</a>
         <ul>
-            <li><a href="#" class="documents">Add a New Title</a></li>
+            <li><a href="#"><i class="documents"></i>Add a New Title</a></li>
         </ul>
         </li>
         <li><a href="#">Account</a>
         <ul>
-            <li><a href="#" class="documents">Logout</a></li>
+            <li><a href="#"><i class="documents"></i>Logout</a></li>
         </ul>
         </li>
       </ul>
     </div>
-    <div id="mainsitecontainer">
+    <div id="mainsitecontainer" ng-init="titleVm.populateGrid(false)">
       <div class="spacer"></div>
       <div id="editmodebanner">
         <b>EDIT</b> mode: <b>ON</b>
@@ -43,35 +53,42 @@
       <div class="spacer"></div>
       <div class="wrapper">
         <div id="titleimage">
-          <img style="position: relative; width:100%; height:100%" src="https://images-na.ssl-images-amazon.com/images/M/MV5BMTA5MzAzNTcyNjZeQTJeQWpwZ15BbWU3MDUyMzE1MTk@._V1_UX182_CR0,0,182,268_AL_.jpg">
+          <img style="position: relative; width:100%; height:100%" src="{{ titleVm.titles[titleVm.titleIndex].posterLink }}">
           <br/>
           <div id="newimagepicker">
             <label for="files" class="btn">Select New Image: </label>
             <input id="files" type="file">
           </div>
         </div>
-        <div id="maindetails">
+        <div id="maindetails" ng-model="titleVm.titles">
           <div id="titlename">
             <span style="font-weight:bold;">Title: </span><br/>
-            <input type="text" id="edittitletext" value="How I Met Your Mother (2005)" class="edtext">
+            <input type="text" id="edittitletext" value="{{ titleVm.titles[titleVm.titleIndex].titleName }}"
+             class="edtext">
+            (<input type="text" id="edityeartext" value="{{ titleVm.titles[titleVm.titleIndex].year }}"
+             class="edtext">)
           </div>
           <div id="ratinggenre">
             <span style="color:#808080">
-            <input type="text" id="editratedtext" value="TV-14" class="edtextsmall">   &nbsp;
-            <input type="text" id="editgenretext" value="Comedy,Romance" class="edtextsmall"></span>
+            <input type="text" id="editratedtext" value="{{ titleVm.titles[titleVm.titleIndex].rated }}"
+             class="edtextsmall">   &nbsp;
+            <input type="text" id="editgenretext" value="{{ titleVm.titles[titleVm.titleIndex].genre }}"
+             class="edtextsmall"></span>
           </div>
           <div class="spacer"></div>
-          <div id="imdbrating">IMDB: <input type="text" id="editimdbrating" style="width:30px" value="9.4"/>/10 &nbsp; 
-            <small>(<input type="text" id="editimdblink" value="http://www.imdb.com/title/tt0460649/" class="edtextsmall">)</small></div>
+          <div id="imdbrating">IMDB: <input type="text" id="editimdbrating" style="width:30px" 
+            value="{{ titleVm.titles[titleVm.titleIndex].imdbRating }}"/>/10 &nbsp; 
+            <small>(<input type="text" id="editimdblink" value="http://www.imdb.com/title/{{ titleVm.titles[titleVm.titleIndex].imdbId }}/" class="edtextsmall">)</small></div>
           <div class="spacer"></div>
-          <div id="released">Released: <input type="date" id="editreleasedate" value="09/19/2005" class="edtext"></div>
+          <div id="released">Released: <input type="date" id="editreleasedate" value="{{ titleVm.titles[titleVm.titleIndex].releaseDateET }}" class="edtext"></div>
           <div class="lessspacer"></div>
-          <div id="runtime">Runtime: <input type="text" id="editruntimemins" style="width:30px" value="22"/> mins</div>
+          <div id="runtime">Runtime: <input type="text" id="editruntimemins" style="width:30px" 
+            value="{{ titleVm.titles[titleVm.titleIndex].runtime }}"/> mins</div>
           <div class="spacer"></div>
           <div id="plotbox" class="wrapper">
             <div id="plotword">Plot:</div>
             <div id="plotdetails">
-              <textarea id="editplottext">A father recounts to his children, through a series of flashbacks, the journey he and his four best friends took leading up to him meeting their mother.</textarea>
+              <textarea id="editplottext">{{ titleVm.titles[titleVm.titleIndex].plot }}</textarea>
             </div>
           </div>
         </div>
@@ -82,25 +99,30 @@
       <div id="moredetails">
         <div id="moredetailsheader">More Details</div>
         <div class="spacer"></div>
-        <div id="director">Director: <input type="text" id="editdirectortext" value="N/A" class="edtext"></div>
+        <div id="director">Director: <input type="text" id="editdirectortext" 
+          value="{{ titleVm.titles[titleVm.titleIndex].directors }}" class="edtext"></div>
         <div class="lessspacer"></div>
-        <div id="writers">Writers: <input type="text" id="editwriterstext" value="Carter Bays, Craig Thomas" class="edtext"></div>
+        <div id="writers">Writers: <input type="text" id="editwriterstext" 
+          value="{{ titleVm.titles[titleVm.titleIndex].writers }}" class="edtext"></div>
         <div class="lessspacer"></div>
-        <div id="actors">Actors: <input type="text" id="editactorstext" value="Josh Radnor, Jason Segel, Cobie Smulders, Neil Patrick Harris" class="edtext"></div>
+        <div id="actors">Actors: <input type="text" id="editactorstext" 
+          value="{{ titleVm.titles[titleVm.titleIndex].actors }}" class="edtext"></div>
         <div class="spacer"></div>
-        <div id="languages">Language: <input type="text" id="editlanguagestext" value="English" class="edtext"></div>
+        <div id="languages">Language: <input type="text" id="editlanguagestext" 
+          value="{{ titleVm.titles[titleVm.titleIndex].languages }}" class="edtext"></div>
         <div class="lessspacer"></div>
-        <div id="country">Country: <input type="text" id="editcountrytext" value="USA" class="edtext"></div>
+        <div id="country">Country: <input type="text" id="editcountrytext" 
+          value="{{ titleVm.titles[titleVm.titleIndex].country }}" class="edtext"></div>
       </div>
       <div class="spacer"></div>
       <div class="sepline"></div>
       <div class="spacer"></div>
       <div id="awardsratings">
-        <div id="awardsratingsheader">Awards & Ratings</div>
+        <div id="awardsratingsheader">Awards &amp; Ratings</div>
         <div class="spacer"></div>
         <div id="awardsdetails">Nominated for <input type="text" id="editmainwintext" value="2 Golden Globes" class="edtextsmall">. <br/>
-            Another <input type="text" id="editmorewins" style="width:30px" value="21"/> wins & 
-            <input type="text" id="editmorenominations" style="width:30px" value="72"/> nominations.</div>
+            Another <input type="text" id="editmorewins" style="width:30px" value="{{ titleVm.titles[titleVm.titleIndex].otherWins }}"/> wins &amp; 
+            <input type="text" id="editmorenominations" style="width:30px" value="{{ titleVm.titles[titleVm.titleIndex].otherNominations }}"/> nominations.</div>
         <div class="spacer"></div>
         <div id="comp-j1fcekla2" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" class="s14" data-state="desktop shouldUseFlex"
          data-prev-text="Submit Changes" data-prev-min-width="47" data-prev-width="88">

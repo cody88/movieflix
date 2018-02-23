@@ -4,6 +4,9 @@ function clearText(element) {
 
 
 function toggleOptions(element) {
-	console.log(element);
 	document.getElementById(element).classList.toggle('active');
+}
+
+function setDropdownText(element, value) {
+	document.getElementById(element).value = value;
 }

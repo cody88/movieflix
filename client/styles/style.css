@@ -184,9 +184,9 @@ body {
  
 .menu ul li:last-child a { border: none; }
 
-/*.menu a.documents { background: url(../images/docs.png) no-repeat 6px center; }
+.menu a.documents { background: url(../images/docs.png) no-repeat 6px left; }
 .menu a.messages { background: url(../images/bubble.png) no-repeat 6px center; }
-.menu a.signout { background: url(../images/arrow.png) no-repeat 6px center; }*/
+.menu a.signout { background: url(../images/arrow.png) no-repeat 6px center; }
 
 .spacer {
   height: 20px;
@@ -258,7 +258,7 @@ body {
   position: relative;
   float: left;
   width: 88%;
-  font-size: 20px;
+  font-size: 15px;
   padding-top: 5px;
   padding-left: 0;
   margin: 0;
@@ -267,11 +267,15 @@ body {
 #editplottext {
   height: 200px;
   width: 100%;
-  font-size: 25px;
+  font-size: 15px;
+}
+
+#edityeartext {
+  width: 60px;
 }
 
 #editdirectortext {
-  width: 95%;
+  width: 96;
 }
 
 #editwriterstext {

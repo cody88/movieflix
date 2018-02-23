@@ -18,6 +18,7 @@
         self.createTitle = createTitle;
         self.rateTitle = rateTitle;
         self.reviewTitle = reviewTitle;
+        self.titles = null;
 
         function getCatalog(fromCount) {
             return $http.get('http://localhost:8080/moduleapi/api/catalog/' + fromCount)
@@ -60,6 +61,8 @@
         }
 
         function successFn(response) {
+            self.titles = response.data;
+            //console.log(self.titles.toSource());
             return response.data; //RESOLVE
         }
 

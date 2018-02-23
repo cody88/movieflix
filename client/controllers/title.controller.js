@@ -18,6 +18,7 @@
         titleVm.toggleDisabled = toggleDisabled;
         titleVm.mySort = mySort;
         titleVm.myFilterF = myFilterF;
+        titleVm.titleIndex = -1;
 
         function loadData() {
             console.log('in TitleController.loadData()');
@@ -29,8 +30,8 @@
                 sortOrder: false
             };*/
 
-
-            titleService.getCatalog(0) //$routeParams.id)
+            if(titleService.titles == null) {
+                titleService.getCatalog(0) //$routeParams.id)
                 .then(function(data) {
                     titleVm.titles = data;
                     defer.resolve();
@@ -39,14 +40,75 @@
                     console.log(data);
                     defer.reject();
                 });
+            } else {
+                titleVm.titles = titleService.titles;
+            }
+            console.log(titleVm.titles.toSource());
 
             return defer.promise;
         }
 
-        function populateGrid() {
+        function populateGrid(toPopulate) {
+            //history.pushState("", document.title, window.location.pathname + window.location.search);
             titleVm.loadData().then(function(response){
                 $scope.titles = titleVm.titles;
-                populateGridCore();
+                if(toPopulate == true)
+                    populateGridCore();
+                else {
+                    var search = decodeURIComponent(window.location.href.slice(window.location.href.indexOf('?')+1));
+                    var params = search.split('&');
+                    for(var i=0; i<params.length; i++) {
+                        var keyVal = params[i].split('=');
+                        console.log(keyVal.toSource());
+                        if(keyVal[0] == 'id') {
+                            titleVm.titleIndex = keyVal[1];
+                            break;
+                        }
+                    }
+                    // Housekeeping for the details (and edittitle) page
+                    var rDate = new Date(titleVm.titles[titleVm.titleIndex].releaseDate);
+                    titleVm.titles[titleVm.titleIndex].releaseDate = rDate.getDate()+"/"+(rDate.getMonth()+1)+"/"+rDate.getFullYear();
+                    titleVm.titles[titleVm.titleIndex].releaseDateET = rDate.getFullYear()+"-"
+                                                                        +(rDate.getMonth()<9 ? '0'+(rDate.getMonth()+1) : (rDate.getMonth()+1))+"-"
+                                                                        +(rDate.getDate()<10 ? '0'+rDate.getDate() : rDate.getDate());
+                    console.log(titleVm.titles[titleVm.titleIndex].toSource());
+                    // Housekeeping for the details page
+                    var nHours = Math.floor(titleVm.titles[titleVm.titleIndex].runtimeInMinutes / 60);
+                    var nMins = titleVm.titles[titleVm.titleIndex].runtimeInMinutes % 60;
+                    if(nHours == 0)
+                        titleVm.titles[titleVm.titleIndex].runtime = titleVm.titles[titleVm.titleIndex].runtimeInMinutes+" mins";
+                    else {
+                        titleVm.titles[titleVm.titleIndex].runtime = nHours;
+                        if(nHours == 1)
+                            titleVm.titles[titleVm.titleIndex].runtime += " hour ";
+                        else
+                            titleVm.titles[titleVm.titleIndex].runtime += " hours ";
+                        titleVm.titles[titleVm.titleIndex].runtime += (nMins+" mins");
+                    }
+                    // Housekeeping for the details page
+                    titleVm.titles[titleVm.titleIndex].genre = titleVm.titles[titleVm.titleIndex].genre.join(',');
+                    titleVm.titles[titleVm.titleIndex].directors = titleVm.titles[titleVm.titleIndex].directors.join(',');
+                    titleVm.titles[titleVm.titleIndex].writers = titleVm.titles[titleVm.titleIndex].writers.join(',');
+                    titleVm.titles[titleVm.titleIndex].actors = titleVm.titles[titleVm.titleIndex].actors.join(',');
+                    titleVm.titles[titleVm.titleIndex].languages = titleVm.titles[titleVm.titleIndex].languages.join(',');
+                    // Housekeeping for the details page
+                    titleVm.titles[titleVm.titleIndex].awardsLine = "";
+                    if(titleVm.titles[titleVm.titleIndex].primaryAwardWon == true)
+                        titleVm.titles[titleVm.titleIndex].awardsLine += "Won ";
+                    else
+                        titleVm.titles[titleVm.titleIndex].awardsLine += "Nominated for ";
+                    titleVm.titles[titleVm.titleIndex].awardsLine += (
+                        titleVm.titles[titleVm.titleIndex].primaryAwardCount + " " +
+                        titleVm.titles[titleVm.titleIndex].primaryAward + "s. Another " +
+                        titleVm.titles[titleVm.titleIndex].otherWins + " wins & " +
+                        titleVm.titles[titleVm.titleIndex].otherNominations + " nominations."
+                    );
+
+                    // Housekeeping for the details page
+                    var link = document.getElementById("EditTitleLink");
+                    if(link != null)
+                        link.href = "edittitle.html?id="+titleVm.titleIndex;
+                }
             });
         }
 
@@ -64,12 +126,15 @@
                     imag.src = $scope.titles[4*nrows + ncols].posterLink;
                     var titl = document.createElement("div");
                     titl.id = "cattitlename";
-                    titl.innerText = $scope.titles[4*nrows + ncols].titleName;
+                    titl.innerText = $scope.titles[4*nrows+ncols].titleName;
                     lin.appendChild(imag);
                     lin.appendChild(titl);
                     var editButton = document.createElement("button");
                     editButton.id = "edittitlebutton";
                     editButton.innerText = "Edit";
+                    editButton.addEventListener("click", function() {
+                        dsds
+                    }, false);
                     var deleteButton = document.createElement("button");
                     deleteButton.id = "deletetitlebutton";
                     deleteButton.innerText = "Delete";
@@ -160,6 +225,12 @@
                     }
                     toInlclude = (j == gens.length)? false : true;
                 }
+                if(toInlclude && document.getElementById('namefilteroption').checked) {
+                    filtered = true;
+                    var name =  document.getElementById('namefilteroptiontext').value;
+                    if(titleVm.titles[i].titleName.toUpperCase().indexOf(name.trim().toUpperCase()) == -1)
+                        toInlclude = false;
+                }
                 
                 if(toInlclude) {
                     if($scope.titles.length > 0)
@@ -173,5 +244,6 @@
             document.getElementById('catalogtable').innerHTML = "";
             populateGridCore();
         }
+ 
     }
 })();

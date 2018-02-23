@@ -4,9 +4,9 @@
 // Declare app level module which depends on views, and components
     angular.module('movieflix', ['ngMessages', 'ngRoute']).
     config(['$locationProvider', '$routeProvider', function ($locationProvider, $routeProvider) {
-        $locationProvider.hashPrefix('!');
+        //$locationProvider.hashPrefix('!');
 
-        $routeProvider.otherwise({redirectTo: '/index.html'});
+        //$routeProvider.otherwise({redirectTo: '/index.html'});
     }]).config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.headers.common = {
             'ah': 'uni',
