@@ -72,7 +72,7 @@
                                                                         +(rDate.getMonth()<9 ? '0'+(rDate.getMonth()+1) : (rDate.getMonth()+1))+"-"
                                                                         +(rDate.getDate()<10 ? '0'+rDate.getDate() : rDate.getDate());
                     console.log(titleVm.titles[titleVm.titleIndex].toSource());
-                    // Housekeeping for the details page
+                    // Housekeeping for the details and edittitle page
                     var nHours = Math.floor(titleVm.titles[titleVm.titleIndex].runtimeInMinutes / 60);
                     var nMins = titleVm.titles[titleVm.titleIndex].runtimeInMinutes % 60;
                     if(nHours == 0)
@@ -85,24 +85,31 @@
                             titleVm.titles[titleVm.titleIndex].runtime += " hours ";
                         titleVm.titles[titleVm.titleIndex].runtime += (nMins+" mins");
                     }
+                    titleVm.titles[titleVm.titleIndex].runtimeHours = nHours;
+                    titleVm.titles[titleVm.titleIndex].runtimeMinutes = nMins;
                     // Housekeeping for the details page
                     titleVm.titles[titleVm.titleIndex].genre = titleVm.titles[titleVm.titleIndex].genre.join(',');
                     titleVm.titles[titleVm.titleIndex].directors = titleVm.titles[titleVm.titleIndex].directors.join(',');
                     titleVm.titles[titleVm.titleIndex].writers = titleVm.titles[titleVm.titleIndex].writers.join(',');
                     titleVm.titles[titleVm.titleIndex].actors = titleVm.titles[titleVm.titleIndex].actors.join(',');
                     titleVm.titles[titleVm.titleIndex].languages = titleVm.titles[titleVm.titleIndex].languages.join(',');
-                    // Housekeeping for the details page
+                    // Housekeeping for the details and edittitle page
                     titleVm.titles[titleVm.titleIndex].awardsLine = "";
-                    if(titleVm.titles[titleVm.titleIndex].primaryAwardWon == true)
+                    if(titleVm.titles[titleVm.titleIndex].primaryAwardWon == true) {
                         titleVm.titles[titleVm.titleIndex].awardsLine += "Won ";
-                    else
+                        titleVm.titles[titleVm.titleIndex].awardWonYesNo = "Won";
+                    }
+                    else {
                         titleVm.titles[titleVm.titleIndex].awardsLine += "Nominated for ";
+                        titleVm.titles[titleVm.titleIndex].awardWonYesNo = "Nominated";
+                    }
                     titleVm.titles[titleVm.titleIndex].awardsLine += (
                         titleVm.titles[titleVm.titleIndex].primaryAwardCount + " " +
                         titleVm.titles[titleVm.titleIndex].primaryAward + "s. Another " +
                         titleVm.titles[titleVm.titleIndex].otherWins + " wins & " +
                         titleVm.titles[titleVm.titleIndex].otherNominations + " nominations."
                     );
+
 
                     // Housekeeping for the details page
                     var link = document.getElementById("EditTitleLink");

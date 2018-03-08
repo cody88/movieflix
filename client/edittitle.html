@@ -82,8 +82,12 @@
           <div class="spacer"></div>
           <div id="released">Released: <input type="date" id="editreleasedate" value="{{ titleVm.titles[titleVm.titleIndex].releaseDateET }}" class="edtext"></div>
           <div class="lessspacer"></div>
-          <div id="runtime">Runtime: <input type="text" id="editruntimemins" style="width:30px" 
-            value="{{ titleVm.titles[titleVm.titleIndex].runtime }}"/> mins</div>
+          <div id="runtime">Runtime: 
+            <input type="text" id="editruntimemins" style="width:30px" 
+            value="{{ titleVm.titles[titleVm.titleIndex].runtimeHours }}"/> hours 
+            <input type="text" id="editruntimemins" style="width:30px" 
+            value="{{ titleVm.titles[titleVm.titleIndex].runtimeMinutes }}"/> mins
+          </div>
           <div class="spacer"></div>
           <div id="plotbox" class="wrapper">
             <div id="plotword">Plot:</div>
@@ -120,9 +124,18 @@
       <div id="awardsratings">
         <div id="awardsratingsheader">Awards &amp; Ratings</div>
         <div class="spacer"></div>
-        <div id="awardsdetails">Nominated for <input type="text" id="editmainwintext" value="2 Golden Globes" class="edtextsmall">. <br/>
-            Another <input type="text" id="editmorewins" style="width:30px" value="{{ titleVm.titles[titleVm.titleIndex].otherWins }}"/> wins &amp; 
-            <input type="text" id="editmorenominations" style="width:30px" value="{{ titleVm.titles[titleVm.titleIndex].otherNominations }}"/> nominations.</div>
+        <div id="awardsdetails">
+            <input type="text" id="editWinType" style="width:90px" 
+                value="{{ titleVm.titles[titleVm.titleIndex].awardWonYesNo }}" class="edtextsmall"/>:
+            <input type="text" id="editWinCount" style="width:30px" 
+                value="{{ titleVm.titles[titleVm.titleIndex].primaryAwardCount }}" class="edtextsmall"/> 
+            <input type="text" id="editWinAward" style="width:120px"
+                value="{{ titleVm.titles[titleVm.titleIndex].primaryAward }}" class="edtextsmall">(s). <br/>
+            Another <input type="text" id="editmorewins" style="width:30px" 
+                value="{{ titleVm.titles[titleVm.titleIndex].otherWins }}"/> wins &amp; 
+            <input type="text" id="editmorenominations" style="width:30px" 
+                value="{{ titleVm.titles[titleVm.titleIndex].otherNominations }}"/> nominations.
+        </div>
         <div class="spacer"></div>
         <div id="comp-j1fcekla2" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" class="s14" data-state="desktop shouldUseFlex"
          data-prev-text="Submit Changes" data-prev-min-width="47" data-prev-width="88">
